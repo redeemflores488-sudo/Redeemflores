@@ -1,24 +1,31 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoursesModule } from './courses/courses.module';
 import { StudentsModule } from './student/students.module';
 
-// Debug: Log the MYSQL_URL
-console.log('MYSQL_URL:', process.env.MYSQL_URL);
-console.log('All env vars:', Object.keys(process.env));
-
 @Module({
   imports: [
-    TypeOrmModule.forRoot(
-      process.env.MYSQL_URL
-        ? {
-            type: 'mysql',
-            url: process.env.MYSQL_URL,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => {
+        const mysqlUrl = configService.get<string>('MYSQL_URL');
+        
+        if (mysqlUrl) {
+          // Railway: use MYSQL_URL
+          return {
+            type: 'mysql' as const,
+            url: mysqlUrl,
             autoLoadEntities: true,
             synchronize: true,
-          }
-        : {
-            type: 'mysql',
+          };
+        } else {
+          // Localhost: use individual values
+          return {
+            type: 'mysql' as const,
             host: 'localhost',
             port: 3306,
             username: 'root',
@@ -26,8 +33,11 @@ console.log('All env vars:', Object.keys(process.env));
             database: 'enrollment_db',
             autoLoadEntities: true,
             synchronize: true,
-          }
-    ),
+          };
+        }
+      },
+      inject: [ConfigService],
+    }),
     CoursesModule,
     StudentsModule,
   ],
