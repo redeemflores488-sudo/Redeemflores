@@ -1,7 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoursesModule } from './courses/courses.module';
-import { StudentsModule } from './student/students.module'; // ← Keep this as is
+import { StudentsModule } from './student/students.module';
+
+// Debug: Log the MYSQL_URL
+console.log('MYSQL_URL:', process.env.MYSQL_URL);
+console.log('All env vars:', Object.keys(process.env));
 
 @Module({
   imports: [
