@@ -12,7 +12,8 @@ import { StudentsModule } from './student/students.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
-        const mysqlUrl = configService.get<string>('MYSQL_URL');
+  // Check ConfigService OR direct process.env as a fallback
+  const mysqlUrl = configService.get<string>('MYSQL_URL') || process.env.MYSQL_URL;
         
         if (mysqlUrl) {
           // Railway: use MYSQL_URL
