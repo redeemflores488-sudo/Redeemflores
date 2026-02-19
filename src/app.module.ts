@@ -12,30 +12,25 @@ import { StudentsModule } from './student/students.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
-  // Check ConfigService OR direct process.env as a fallback
-  const mysqlUrl = configService.get<string>('MYSQL_URL') || process.env.MYSQL_URL;
-        
-        if (mysqlUrl) {
-          // Railway: use MYSQL_URL
-          return {
-            type: 'mysql' as const,
-            url: mysqlUrl,
-            autoLoadEntities: true,
-            synchronize: true,
-          };
-        } else {
-          // Localhost: use individual values
-          return {
-            type: 'mysql' as const,
-            host: 'localhost',
-            port: 3306,
-            username: 'root',
-            password: '',
-            database: 'enrollment_db',
-            autoLoadEntities: true,
-            synchronize: true,
-          };
-        }
+        // Map your specific Railway variables
+        const host = configService.get<string>('DB_HOST');
+        const username = configService.get<string>('DB_USERNAME');
+        const password = configService.get<string>('DB_PASSWORD');
+        const database = configService.get<string>('DB_NAME');
+        const port = configService.get<number>('DB_PORT') || 3306;
+
+        console.log(`📡 Attempting to connect to database at ${host}:${port}`);
+
+        return {
+          type: 'mysql',
+          host: host || 'localhost',
+          port: port,
+          username: username || 'root',
+          password: password || '',
+          database: database || 'enrollment_db',
+          autoLoadEntities: true,
+          synchronize: true, // Only for dev/testing
+        };
       },
       inject: [ConfigService],
     }),
