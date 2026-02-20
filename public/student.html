@@ -311,15 +311,19 @@
     </div>
 
     <script>
-        const API = `${window.location.origin}/students`;
+    // Use the base URL
+    const BASE_URL = window.location.origin;
+    let allCourses = [];
+    let currentStudentId = null;
 
-
-        async function fetchStudents() {
-            const res = await fetch(`${API}/students`);
+    async function fetchStudents() {
+        try {
+            // FIXED: Removed the extra /students from the path
+            const res = await fetch(`${BASE_URL}/students`);
             const students = await res.json();
             const tbody = document.getElementById('studentList');
 
-            if (!students.length) {
+            if (!students || !students.length) {
                 tbody.innerHTML = `<tr><td colspan="4" class="empty-state">No students yet. Add one above!</td></tr>`;
                 return;
             }
@@ -329,102 +333,109 @@
                     ? s.enrolledCourses.map(c => `<span class="badge-course">${c.title}</span>`).join('')
                     : `<span class="no-courses">No enrollments</span>`;
 
+                // FIXED: Removed the extra backticks that were breaking your buttons
                 return `<tr>
                     <td><span class="badge-id">${s.studentId}</span></td>
                     <td>${s.name}</td>
                     <td>${courses}</td>
                     <td>
-                        `<button class="btn-enroll" onclick="openModal(${s.id}, '${s.name}', ${JSON.stringify(s.enrolledCourses || []).replace(/"/g, '&quot;')})">Enroll</button>
-                        `<button class="btn-delete" onclick="deleteStudent(${s.id})">Delete</button>`
+                        <button class="btn-enroll" onclick="openModal(${s.id}, '${s.name}', ${JSON.stringify(s.enrolledCourses || []).replace(/"/g, '&quot;')})">Enroll</button>
+                        <button class="btn-delete" onclick="deleteStudent(${s.id})">Delete</button>
                     </td>
                 </tr>`;
             }).join('');
+        } catch (err) {
+            console.error(err);
+            document.getElementById('studentList').innerHTML = `<tr><td colspan="4" class="empty-state" style="color:var(--danger)">Error connecting to server.</td></tr>`;
         }
+    }
 
-        async function fetchCourses() {
-            const res = await fetch(`${API}/courses`);
-            allCourses = await res.json();
-        }
+    async function fetchCourses() {
+        // FIXED: Changed from API/courses to BASE_URL/courses
+        const res = await fetch(`${BASE_URL}/courses`);
+        allCourses = await res.json();
+    }
 
-        async function addStudent() {
-            const name = document.getElementById('studentName').value.trim();
-            const studentId = document.getElementById('studentIdInput').value.trim();
-            if (!name || !studentId) return alert('Please fill in all fields.');
+    async function addStudent() {
+        const name = document.getElementById('studentName').value.trim();
+        const studentId = document.getElementById('studentIdInput').value.trim();
+        if (!name || !studentId) return alert('Please fill in all fields.');
 
-            await fetch(`${API}/students`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, studentId }),
-            });
+        // FIXED: Corrected path
+        await fetch(`${BASE_URL}/students`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, studentId }),
+        });
 
-            document.getElementById('studentName').value = '';
-            document.getElementById('studentIdInput').value = '';
-            fetchStudents();
-        }
-
-        async function deleteStudent(id) {
-            if (!confirm('Delete this student?')) return;
-            await fetch(`${API}/students/${id}`, { method: 'DELETE' });
-            fetchStudents();
-        }
-
-        function openModal(studentId, name, enrolledCourses) {
-            currentStudentId = studentId;
-            document.getElementById('modalStudentName').textContent = `Managing courses for: ${name}`;
-            document.getElementById('enrollModal').classList.add('open');
-            renderCourseOptions(enrolledCourses);
-        }
-
-        function closeModal() {
-            document.getElementById('enrollModal').classList.remove('open');
-            currentStudentId = null;
-            fetchStudents();
-        }
-
-        function renderCourseOptions(enrolledCourses) {
-            const enrolledIds = enrolledCourses.map(c => c.id);
-            const list = document.getElementById('courseOptionsList');
-
-            if (!allCourses.length) {
-                list.innerHTML = `<p style="color:var(--muted);font-size:0.85rem;">No courses available.</p>`;
-                return;
-            }
-
-            list.innerHTML = allCourses.map(c => {
-                const isEnrolled = enrolledIds.includes(c.id);
-                const btn = isEnrolled
-                    ? <button class="btn-unenroll-sm" onclick="unenroll(${c.id}, this)">Unenroll</button>
-                    : <button class="btn-enroll-sm" onclick="enroll(${c.id}, this)">Enroll</button>;
-                return `<div class="course-option">
-                    <div>
-                        <div class="course-option-name">${c.title}</div>
-                        <div class="course-option-credits">${c.credits} credits</div>
-                    </div>
-                    ${btn}
-                </div>`;
-            }).join('');
-        }
-
-        async function enroll(courseId, btn) {
-            btn.disabled = true;
-            await fetch(`${API}/students/${currentStudentId}/enroll/${courseId}`, { method: 'POST' });
-            // Re-fetch student and refresh modal
-            const res = await fetch(`${API}/students/${currentStudentId}`);
-            const student = await res.json();
-            renderCourseOptions(student.enrolledCourses || []);
-        }
-
-        async function unenroll(courseId, btn) {
-            btn.disabled = true;
-            await fetch(`${API}/students/${currentStudentId}/unenroll/${courseId}`, { method: 'DELETE' });
-            const res = await fetch(`${API}/students/${currentStudentId}`);
-            const student = await res.json();
-            renderCourseOptions(student.enrolledCourses || []);
-        }
-
-        // Init
-        fetchCourses();
+        document.getElementById('studentName').value = '';
+        document.getElementById('studentIdInput').value = '';
         fetchStudents();
-    </script>
+    }
+
+    async function deleteStudent(id) {
+        if (!confirm('Delete this student?')) return;
+        await fetch(`${BASE_URL}/students/${id}`, { method: 'DELETE' });
+        fetchStudents();
+    }
+
+    function openModal(studentId, name, enrolledCourses) {
+        currentStudentId = studentId;
+        document.getElementById('modalStudentName').textContent = `Managing: ${name}`;
+        document.getElementById('enrollModal').classList.add('open');
+        renderCourseOptions(enrolledCourses);
+    }
+
+    function closeModal() {
+        document.getElementById('enrollModal').classList.remove('open');
+        currentStudentId = null;
+        fetchStudents();
+    }
+
+    function renderCourseOptions(enrolledCourses) {
+        const enrolledIds = enrolledCourses.map(c => c.id);
+        const list = document.getElementById('courseOptionsList');
+
+        if (!allCourses.length) {
+            list.innerHTML = `<p style="color:var(--muted);font-size:0.85rem;">No courses available.</p>`;
+            return;
+        }
+
+        list.innerHTML = allCourses.map(c => {
+            const isEnrolled = enrolledIds.includes(c.id);
+            const btn = isEnrolled
+                ? `<button class="btn-unenroll-sm" onclick="unenroll(${c.id}, this)">Unenroll</button>`
+                : `<button class="btn-enroll-sm" onclick="enroll(${c.id}, this)">Enroll</button>`;
+            return `<div class="course-option">
+                <div>
+                    <div class="course-option-name">${c.title}</div>
+                    <div class="course-option-credits">${c.credits} credits</div>
+                </div>
+                ${btn}
+            </div>`;
+        }).join('');
+    }
+
+    async function enroll(courseId, btn) {
+        btn.disabled = true;
+        await fetch(`${BASE_URL}/students/${currentStudentId}/enroll/${courseId}`, { method: 'POST' });
+        const res = await fetch(`${BASE_URL}/students/${currentStudentId}`);
+        const student = await res.json();
+        renderCourseOptions(student.enrolledCourses || []);
+    }
+
+    async function unenroll(courseId, btn) {
+        btn.disabled = true;
+        await fetch(`${BASE_URL}/students/${currentStudentId}/unenroll/${courseId}`, { method: 'DELETE' });
+        const res = await fetch(`${BASE_URL}/students/${currentStudentId}`);
+        const student = await res.json();
+        renderCourseOptions(student.enrolledCourses || []);
+    }
+
+    // Init
+    fetchCourses();
+    fetchStudents();
+</script>
+
 </body>
 </html>
