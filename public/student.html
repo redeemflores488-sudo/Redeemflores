@@ -313,8 +313,6 @@
     <script>
         const API = `${window.location.origin}/students`;
 
-        let allCourses = [];
-        let currentStudentId = null;
 
         async function fetchStudents() {
             const res = await fetch(`${API}/students`);
