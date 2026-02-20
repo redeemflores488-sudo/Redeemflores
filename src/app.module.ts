@@ -11,28 +11,32 @@ import { StudentsModule } from './student/students.module';
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => {
-        // Map your specific Railway variables
-        const host = configService.get<string>('DB_HOST');
-        const username = configService.get<string>('DB_USERNAME');
-        const password = configService.get<string>('DB_PASSWORD');
-        const database = configService.get<string>('DB_NAME');
-        const port = configService.get<number>('DB_PORT') || 3306;
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        const url = config.get<string>('MYSQL_URL');
 
-        console.log(`📡 Attempting to connect to database at ${host}:${port}`);
+        // If on Railway, this URL will exist and we use it
+        if (url) {
+          return {
+            type: 'mysql',
+            url: url,
+            autoLoadEntities: true,
+            synchronize: true, // Be careful with this in real production
+          };
+        }
 
+        // If the URL doesn't exist (like on your PC), use individual variables
         return {
           type: 'mysql',
-          host: host || 'localhost',
-          port: port,
-          username: username || 'root',
-          password: password || '',
-          database: database || 'enrollment_db',
+          host: config.get<string>('DB_HOST') || 'localhost',
+          port: config.get<number>('DB_PORT') || 3306,
+          username: config.get<string>('DB_USERNAME') || 'root',
+          password: config.get<string>('DB_PASSWORD') || '',
+          database: config.get<string>('DB_NAME') || 'railway',
           autoLoadEntities: true,
-          synchronize: true, // Only for dev/testing
+          synchronize: true,
         };
       },
-      inject: [ConfigService],
     }),
     CoursesModule,
     StudentsModule,
