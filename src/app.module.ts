@@ -8,10 +8,10 @@ import { join } from 'path';
 
 @Module({
   imports: [
-
     ServeStaticModule.forRoot({
-            rootPath: join(__dirname, '..', 'public'), 
-                }),
+      // FIXED: process.cwd() is more reliable on Railway than __dirname
+      rootPath: join(process.cwd(), 'public'), 
+    }),
     
     ConfigModule.forRoot({
       isGlobal: true,
@@ -22,17 +22,15 @@ import { join } from 'path';
       useFactory: (config: ConfigService) => {
         const url = config.get<string>('MYSQL_URL');
 
-        // If on Railway, this URL will exist and we use it
         if (url) {
           return {
             type: 'mysql',
             url: url,
             autoLoadEntities: true,
-            synchronize: true, // Be careful with this in real production
+            synchronize: true, 
           };
         }
 
-        // If the URL doesn't exist (like on your PC), use individual variables
         return {
           type: 'mysql',
           host: config.get<string>('DB_HOST') || 'localhost',
