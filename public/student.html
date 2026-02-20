@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Portal - Courses</title>
+    <title>School Portal - Students</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
@@ -16,12 +16,28 @@
             --text: #e2e8f0;
             --muted: #64748b;
             --danger: #f87171;
-            --warning: #fbbf24;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: var(--sidebar); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; display: flex; }
+        body {
+            background: var(--sidebar);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+        }
 
-        .sidebar { width: 240px; min-height: 100vh; background: var(--surface); padding: 32px 20px; display: flex; flex-direction: column; border-right: 1px solid rgba(255,255,255,0.06); position: fixed; top: 0; left: 0; bottom: 0; }
+        /* SIDEBAR */
+        .sidebar {
+            width: 240px;
+            min-height: 100vh;
+            background: var(--surface);
+            padding: 32px 20px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(255,255,255,0.06);
+            position: fixed;
+            top: 0; left: 0; bottom: 0;
+        }
         .sidebar-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--accent); letter-spacing: -0.5px; margin-bottom: 8px; }
         .sidebar-sub { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 40px; }
         .nav-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 10px; padding-left: 12px; }
@@ -30,39 +46,202 @@
         .nav-link.active { background: rgba(110,231,183,0.12); color: var(--accent); }
         .nav-icon { font-size: 1.1rem; width: 20px; text-align: center; }
 
+        /* MAIN */
         .main { margin-left: 240px; flex: 1; padding: 40px; }
         .page-title { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--text); letter-spacing: -1px; }
         .page-subtitle { color: var(--muted); font-size: 0.9rem; margin-top: 4px; margin-bottom: 32px; }
 
-        .layout { display: grid; grid-template-columns: 320px 1fr; gap: 24px; align-items: start; }
-
-        .form-card { background: var(--card); border-radius: 16px; padding: 28px; border: 1px solid rgba(255,255,255,0.06); }
-        .form-card-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; color: var(--accent); margin-bottom: 20px; }
-        .form-group { margin-bottom: 16px; }
+        /* FORM CARD */
+        .form-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid rgba(255,255,255,0.06);
+            margin-bottom: 28px;
+        }
+        .form-card-title {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; align-items: end; }
         .form-group label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 6px; display: block; }
-        .form-control-dark { background: var(--surface); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--text); padding: 10px 14px; font-size: 0.9rem; width: 100%; outline: none; transition: border-color 0.2s; font-family: 'DM Sans', sans-serif; }
+        .form-control-dark {
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: var(--text);
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            width: 100%;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: 'DM Sans', sans-serif;
+        }
         .form-control-dark:focus { border-color: var(--accent); }
-        .btn-accent { background: var(--accent); color: #0f1117; border: none; border-radius: 8px; padding: 11px 20px; font-weight: 700; font-size: 0.85rem; cursor: pointer; font-family: 'Syne', sans-serif; width: 100%; transition: opacity 0.2s; margin-top: 4px; }
+        .btn-accent {
+            background: var(--accent);
+            color: #0f1117;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-family: 'Syne', sans-serif;
+            white-space: nowrap;
+            transition: opacity 0.2s;
+        }
         .btn-accent:hover { opacity: 0.85; }
-        .btn-accent.editing { background: var(--warning); }
 
-        .table-card { background: var(--card); border-radius: 16px; border: 1px solid rgba(255,255,255,0.06); overflow: hidden; }
-        .table-header { padding: 20px 28px; border-bottom: 1px solid rgba(255,255,255,0.06); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; }
+        /* TABLE */
+        .table-card {
+            background: var(--card);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.06);
+            overflow: hidden;
+        }
+        .table-header {
+            padding: 20px 28px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+        }
         table { width: 100%; border-collapse: collapse; }
-        thead th { padding: 12px 20px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); background: rgba(255,255,255,0.02); font-weight: 500; text-align: left; }
+        thead th {
+            padding: 12px 20px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--muted);
+            background: rgba(255,255,255,0.02);
+            font-weight: 500;
+            text-align: left;
+        }
         tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
         tbody tr:hover { background: rgba(255,255,255,0.03); }
         tbody tr:last-child { border-bottom: none; }
         td { padding: 14px 20px; font-size: 0.88rem; vertical-align: middle; }
 
-        .badge-credits { background: rgba(110,231,183,0.12); color: var(--accent); padding: 3px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; }
-        .btn-edit { background: rgba(251,191,36,0.12); color: var(--warning); border: none; border-radius: 6px; padding: 5px 12px; font-size: 0.78rem; cursor: pointer; font-weight: 500; transition: background 0.2s; margin-right: 4px; }
-        .btn-edit:hover { background: rgba(251,191,36,0.25); }
-        .btn-delete { background: rgba(248,113,113,0.1); color: var(--danger); border: none; border-radius: 6px; padding: 5px 12px; font-size: 0.78rem; cursor: pointer; font-weight: 500; transition: background 0.2s; }
+        /* BADGES */
+        .badge-id {
+            background: rgba(129,140,248,0.15);
+            color: var(--accent2);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            font-family: 'Syne', sans-serif;
+        }
+        .badge-course {
+            background: rgba(110,231,183,0.12);
+            color: var(--accent);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.73rem;
+            margin: 2px;
+            display: inline-block;
+        }
+        .no-courses { color: var(--muted); font-size: 0.8rem; font-style: italic; }
+
+        /* ACTION BUTTONS */
+        .btn-enroll {
+            background: rgba(129,140,248,0.15);
+            color: var(--accent2);
+            border: none;
+            border-radius: 6px;
+            padding: 5px 12px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            transition: background 0.2s;
+            margin-right: 4px;
+        }
+        .btn-enroll:hover { background: rgba(129,140,248,0.28); }
+        .btn-delete {
+            background: rgba(248,113,113,0.1);
+            color: var(--danger);
+            border: none;
+            border-radius: 6px;
+            padding: 5px 12px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
         .btn-delete:hover { background: rgba(248,113,113,0.22); }
+
+        /* MODAL */
+        .modal-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-box {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 32px;
+            width: 420px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .modal-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: 6px; }
+        .modal-sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 20px; }
+        .course-option {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: var(--surface);
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+        }
+        .course-option-name { font-weight: 500; }
+        .course-option-credits { color: var(--muted); font-size: 0.78rem; }
+        .btn-enroll-sm {
+            background: var(--accent);
+            color: #0f1117;
+            border: none;
+            border-radius: 6px;
+            padding: 4px 12px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Syne', sans-serif;
+        }
+        .btn-unenroll-sm {
+            background: rgba(248,113,113,0.15);
+            color: var(--danger);
+            border: none;
+            border-radius: 6px;
+            padding: 4px 12px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .modal-close {
+            background: rgba(255,255,255,0.06);
+            color: var(--text);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            margin-top: 16px;
+            font-family: 'DM Sans', sans-serif;
+        }
         .empty-state { padding: 48px; text-align: center; color: var(--muted); }
-        .cancel-btn { background: none; border: none; color: var(--muted); font-size: 0.8rem; cursor: pointer; margin-top: 8px; text-align: center; width: 100%; }
-        .cancel-btn:hover { color: var(--text); }
     </style>
 </head>
 <body>
@@ -71,136 +250,182 @@
         <div class="sidebar-logo">🎓 EduPortal</div>
         <div class="sidebar-sub">School Management</div>
         <div class="nav-label">Navigation</div>
-        <a href="index.html" class="nav-link"><span class="nav-icon">⊞</span> Dashboard</a>
-        <a href="student.html" class="nav-link"><span class="nav-icon">👤</span> Students</a>
-        <a href="course.html" class="nav-link active"><span class="nav-icon">📚</span> Courses</a>
+        <a href="index.html" class="nav-link">
+            <span class="nav-icon">⊞</span> Dashboard
+        </a>
+        <a href="student.html" class="nav-link active">
+            <span class="nav-icon">👤</span> Students
+        </a>
+        <a href="course.html" class="nav-link">
+            <span class="nav-icon">📚</span> Courses
+        </a>
     </aside>
 
     <main class="main">
-        <div class="page-title">Courses</div>
-        <div class="page-subtitle">Create and manage courses available for enrollment.</div>
+        <div class="page-title">Students</div>
+        <div class="page-subtitle">Manage registered students and their course enrollments.</div>
 
-        <div class="layout">
-            <!-- Form -->
-            <div class="form-card">
-                <div class="form-card-title" id="formTitle">📚 Add New Course</div>
-                <input type="hidden" id="courseId">
+        <!-- Add Student Form -->
+        <div class="form-card">
+            <div class="form-card-title">➕ Add New Student</div>
+            <div class="form-row">
                 <div class="form-group">
-                    <label for="title">Course Title</label>
-                    <input type="text" class="form-control-dark" id="title" placeholder="e.g. Introduction to CS">
+                    <label for="studentName">Full Name</label>
+                    <input type="text" class="form-control-dark" id="studentName" placeholder="e.g. Juan Dela Cruz" required>
                 </div>
                 <div class="form-group">
-                    <label for="description">Description</label>
-                    <input type="text" class="form-control-dark" id="description" placeholder="Brief course description">
+                    <label for="studentIdInput">Student ID</label>
+                    <input type="text" class="form-control-dark" id="studentIdInput" placeholder="e.g. STU-0001" required>
                 </div>
-                <div class="form-group">
-                    <label for="credits">Credits</label>
-                    <input type="number" class="form-control-dark" id="credits" placeholder="e.g. 3" min="1" max="6">
-                </div>
-                <button class="btn-accent" id="submitBtn" onclick="saveCourse()">Save Course</button>
-                <button class="cancel-btn" id="cancelBtn" onclick="resetForm()" style="display:none;">✕ Cancel editing</button>
+                <button class="btn-accent" onclick="addStudent()">Add Student</button>
             </div>
+        </div>
 
-            <!-- Table -->
-            <div class="table-card">
-                <div class="table-header">📋 All Courses</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Credits</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="courseList">
-                        <tr><td colspan="5" class="empty-state">Loading courses...</td></tr>
-                    </tbody>
-                </table>
-            </div>
+        <!-- Students Table -->
+        <div class="table-card">
+            <div class="table-header">👤 Registered Students</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Enrolled Courses</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="studentList">
+                    <tr><td colspan="4" class="empty-state">Loading students...</td></tr>
+                </tbody>
+            </table>
         </div>
     </main>
 
+    <!-- Enrollment Modal -->
+    <div class="modal-overlay" id="enrollModal">
+        <div class="modal-box">
+            <div class="modal-title">Manage Enrollments</div>
+            <div class="modal-sub" id="modalStudentName">Student</div>
+            <div id="courseOptionsList"></div>
+            <button class="modal-close" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
     <script>
-        const API = 'http://localhost:3000/courses';
+        const API = 'http://localhost:3000';
+        let allCourses = [];
+        let currentStudentId = null;
 
-        async function fetchCourses() {
-            const res = await fetch(API);
-            const courses = await res.json();
-            const tbody = document.getElementById('courseList');
+        async function fetchStudents() {
+            const res = await fetch(`${API}/students`);
+            const students = await res.json();
+            const tbody = document.getElementById('studentList');
 
-            if (!courses.length) {
-                tbody.innerHTML = `<tr><td colspan="5" class="empty-state">No courses yet. Add one!</td></tr>`;
+            if (!students.length) {
+                tbody.innerHTML = `<tr><td colspan="4" class="empty-state">No students yet. Add one above!</td></tr>`;
                 return;
             }
 
-            tbody.innerHTML = courses.map(c => `
-                <tr>
-                    <td style="color:var(--muted);font-size:0.8rem;">#${c.id}</td>
-                    <td><strong>${c.title}</strong></td>
-                    <td style="color:var(--muted)">${c.description}</td>
-                    <td><span class="badge-credits">${c.credits} cr</span></td>
+            tbody.innerHTML = students.map(s => {
+                const courses = s.enrolledCourses?.length
+                    ? s.enrolledCourses.map(c => `<span class="badge-course">${c.title}</span>`).join('')
+                    : `<span class="no-courses">No enrollments</span>`;
+
+                return `<tr>
+                    <td><span class="badge-id">${s.studentId}</span></td>
+                    <td>${s.name}</td>
+                    <td>${courses}</td>
                     <td>
-                        <button class="btn-edit" onclick="editCourse(${c.id}, '${c.title.replace(/'/g, "\\'")}', '${c.description.replace(/'/g, "\\'")}', ${c.credits})">Edit</button>
-                        <button class="btn-delete" onclick="deleteCourse(${c.id})">Delete</button>
+                        `<button class="btn-enroll" onclick="openModal(${s.id}, '${s.name}', ${JSON.stringify(s.enrolledCourses || []).replace(/"/g, '&quot;')})">Enroll</button>
+                        `<button class="btn-delete" onclick="deleteStudent(${s.id})">Delete</button>`
                     </td>
-                </tr>
-            `).join('');
+                </tr>`;
+            }).join('');
         }
 
-        async function saveCourse() {
-            const id = document.getElementById('courseId').value;
-            const title = document.getElementById('title').value.trim();
-            const description = document.getElementById('description').value.trim();
-            const credits = parseInt(document.getElementById('credits').value);
+        async function fetchCourses() {
+            const res = await fetch(`${API}/courses`);
+            allCourses = await res.json();
+        }
 
-            if (!title || !description || !credits) return alert('Please fill in all fields.');
+        async function addStudent() {
+            const name = document.getElementById('studentName').value.trim();
+            const studentId = document.getElementById('studentIdInput').value.trim();
+            if (!name || !studentId) return alert('Please fill in all fields.');
 
-            const body = JSON.stringify({ title, description, credits });
-            const headers = { 'Content-Type': 'application/json' };
+            await fetch(`${API}/students`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, studentId }),
+            });
 
-            if (id) {
-                await fetch(`${API}/${id}`, { method: 'PATCH', headers, body });
-            } else {
-                await fetch(API, { method: 'POST', headers, body });
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentIdInput').value = '';
+            fetchStudents();
+        }
+
+        async function deleteStudent(id) {
+            if (!confirm('Delete this student?')) return;
+            await fetch(`${API}/students/${id}`, { method: 'DELETE' });
+            fetchStudents();
+        }
+
+        function openModal(studentId, name, enrolledCourses) {
+            currentStudentId = studentId;
+            document.getElementById('modalStudentName').textContent = `Managing courses for: ${name}`;
+            document.getElementById('enrollModal').classList.add('open');
+            renderCourseOptions(enrolledCourses);
+        }
+
+        function closeModal() {
+            document.getElementById('enrollModal').classList.remove('open');
+            currentStudentId = null;
+            fetchStudents();
+        }
+
+        function renderCourseOptions(enrolledCourses) {
+            const enrolledIds = enrolledCourses.map(c => c.id);
+            const list = document.getElementById('courseOptionsList');
+
+            if (!allCourses.length) {
+                list.innerHTML = `<p style="color:var(--muted);font-size:0.85rem;">No courses available.</p>`;
+                return;
             }
 
-            resetForm();
-            fetchCourses();
+            list.innerHTML = allCourses.map(c => {
+                const isEnrolled = enrolledIds.includes(c.id);
+                const btn = isEnrolled
+                    ? <button class="btn-unenroll-sm" onclick="unenroll(${c.id}, this)">Unenroll</button>
+                    : <button class="btn-enroll-sm" onclick="enroll(${c.id}, this)">Enroll</button>;
+                return `<div class="course-option">
+                    <div>
+                        <div class="course-option-name">${c.title}</div>
+                        <div class="course-option-credits">${c.credits} credits</div>
+                    </div>
+                    ${btn}
+                </div>`;
+            }).join('');
         }
 
-        async function deleteCourse(id) {
-            if (!confirm('Delete this course?')) return;
-            await fetch(`${API}/${id}`, { method: 'DELETE' });
-            fetchCourses();
+        async function enroll(courseId, btn) {
+            btn.disabled = true;
+            await fetch(`${API}/students/${currentStudentId}/enroll/${courseId}`, { method: 'POST' });
+            // Re-fetch student and refresh modal
+            const res = await fetch(`${API}/students/${currentStudentId}`);
+            const student = await res.json();
+            renderCourseOptions(student.enrolledCourses || []);
         }
 
-        function editCourse(id, title, description, credits) {
-            document.getElementById('courseId').value = id;
-            document.getElementById('title').value = title;
-            document.getElementById('description').value = description;
-            document.getElementById('credits').value = credits;
-            document.getElementById('formTitle').textContent = '✏️ Edit Course';
-            document.getElementById('submitBtn').textContent = 'Update Course';
-            document.getElementById('submitBtn').classList.add('editing');
-            document.getElementById('cancelBtn').style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        async function unenroll(courseId, btn) {
+            btn.disabled = true;
+            await fetch(`${API}/students/${currentStudentId}/unenroll/${courseId}`, { method: 'DELETE' });
+            const res = await fetch(`${API}/students/${currentStudentId}`);
+            const student = await res.json();
+            renderCourseOptions(student.enrolledCourses || []);
         }
 
-        function resetForm() {
-            document.getElementById('courseId').value = '';
-            document.getElementById('title').value = '';
-            document.getElementById('description').value = '';
-            document.getElementById('credits').value = '';
-            document.getElementById('formTitle').textContent = '📚 Add New Course';
-            document.getElementById('submitBtn').textContent = 'Save Course';
-            document.getElementById('submitBtn').classList.remove('editing');
-            document.getElementById('cancelBtn').style.display = 'none';
-        }
-
+        // Init
         fetchCourses();
+        fetchStudents();
     </script>
 </body>
 </html>
-
