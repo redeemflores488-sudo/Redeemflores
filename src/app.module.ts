@@ -3,9 +3,16 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoursesModule } from './courses/courses.module';
 import { StudentsModule } from './student/students.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
+
+    ServeStaticModule.forRoot({
+            rootPath: join(__dirname, '..', 'public'), 
+                }),
+    
     ConfigModule.forRoot({
       isGlobal: true,
     }),
