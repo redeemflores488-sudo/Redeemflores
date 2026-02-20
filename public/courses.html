@@ -21,48 +21,33 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: var(--sidebar); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; display: flex; }
 
-        .sidebar { width: 240px; min-height: 100vh; background: var(--surface); padding: 32px 20px; display: flex; flex-direction: column; border-right: 1px solid rgba(255,255,255,0.06); position: fixed; top: 0; left: 0; bottom: 0; }
+        .sidebar { width: 240px; min-height: 100vh; background: var(--surface); padding: 32px 20px; display: flex; flex-direction: column; border-right: 1px solid rgba(255,255,255,0.06); position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; }
         .sidebar-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--accent); letter-spacing: -0.5px; margin-bottom: 8px; }
         .sidebar-sub { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 40px; }
-        .nav-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 10px; padding-left: 12px; }
         .nav-link { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; margin-bottom: 4px; }
         .nav-link:hover { background: rgba(255,255,255,0.05); color: var(--text); }
         .nav-link.active { background: rgba(110,231,183,0.12); color: var(--accent); }
-        .nav-icon { font-size: 1.1rem; width: 20px; text-align: center; }
 
-        .main { margin-left: 240px; flex: 1; padding: 40px; }
+        .main { margin-left: 240px; flex: 1; padding: 40px; min-width: 0; }
         .page-title { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--text); letter-spacing: -1px; }
         .page-subtitle { color: var(--muted); font-size: 0.9rem; margin-top: 4px; margin-bottom: 32px; }
 
-        .layout { display: grid; grid-template-columns: 320px 1fr; gap: 24px; align-items: start; }
+        /* FIXED LAYOUT: Changed to allow wrapping */
+        .layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; align-items: start; }
 
         .form-card { background: var(--card); border-radius: 16px; padding: 28px; border: 1px solid rgba(255,255,255,0.06); }
-        .form-card-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; color: var(--accent); margin-bottom: 20px; }
         .form-group { margin-bottom: 16px; }
-        .form-group label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 6px; display: block; }
-        .form-control-dark { background: var(--surface); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--text); padding: 10px 14px; font-size: 0.9rem; width: 100%; outline: none; transition: border-color 0.2s; font-family: 'DM Sans', sans-serif; }
-        .form-control-dark:focus { border-color: var(--accent); }
-        .btn-accent { background: var(--accent); color: #0f1117; border: none; border-radius: 8px; padding: 11px 20px; font-weight: 700; font-size: 0.85rem; cursor: pointer; font-family: 'Syne', sans-serif; width: 100%; transition: opacity 0.2s; margin-top: 4px; }
-        .btn-accent:hover { opacity: 0.85; }
-        .btn-accent.editing { background: var(--warning); }
+        .form-control-dark { background: var(--surface); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--text); padding: 10px 14px; width: 100%; outline: none; }
+        .btn-accent { background: var(--accent); color: #0f1117; border: none; border-radius: 8px; padding: 11px 20px; font-weight: 700; width: 100%; cursor: pointer; }
 
-        .table-card { background: var(--card); border-radius: 16px; border: 1px solid rgba(255,255,255,0.06); overflow: hidden; }
-        .table-header { padding: 20px 28px; border-bottom: 1px solid rgba(255,255,255,0.06); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; }
-        table { width: 100%; border-collapse: collapse; }
-        thead th { padding: 12px 20px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); background: rgba(255,255,255,0.02); font-weight: 500; text-align: left; }
-        tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
-        tbody tr:hover { background: rgba(255,255,255,0.03); }
-        tbody tr:last-child { border-bottom: none; }
-        td { padding: 14px 20px; font-size: 0.88rem; vertical-align: middle; }
-
-        .badge-credits { background: rgba(110,231,183,0.12); color: var(--accent); padding: 3px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; }
-        .btn-edit { background: rgba(251,191,36,0.12); color: var(--warning); border: none; border-radius: 6px; padding: 5px 12px; font-size: 0.78rem; cursor: pointer; font-weight: 500; transition: background 0.2s; margin-right: 4px; }
-        .btn-edit:hover { background: rgba(251,191,36,0.25); }
-        .btn-delete { background: rgba(248,113,113,0.1); color: var(--danger); border: none; border-radius: 6px; padding: 5px 12px; font-size: 0.78rem; cursor: pointer; font-weight: 500; transition: background 0.2s; }
-        .btn-delete:hover { background: rgba(248,113,113,0.22); }
-        .empty-state { padding: 48px; text-align: center; color: var(--muted); }
-        .cancel-btn { background: none; border: none; color: var(--muted); font-size: 0.8rem; cursor: pointer; margin-top: 8px; text-align: center; width: 100%; }
-        .cancel-btn:hover { color: var(--text); }
+        /* FIXED TABLE: Added horizontal scroll */
+        .table-card { background: var(--card); border-radius: 16px; border: 1px solid rgba(255,255,255,0.06); overflow-x: auto; width: 100%; }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        thead th { padding: 12px 20px; font-size: 0.7rem; text-transform: uppercase; color: var(--muted); background: rgba(255,255,255,0.02); text-align: left; }
+        td { padding: 14px 20px; font-size: 0.88rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+        
+        .badge-credits { background: rgba(110,231,183,0.12); color: var(--accent); padding: 3px 10px; border-radius: 20px; font-size: 0.78rem; }
+        .btn-delete { background: rgba(248,113,113,0.1); color: var(--danger); border: none; border-radius: 6px; padding: 5px 12px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -70,10 +55,9 @@
     <aside class="sidebar">
         <div class="sidebar-logo">🎓 EduPortal</div>
         <div class="sidebar-sub">School Management</div>
-        <div class="nav-label">Navigation</div>
-        <a href="index.html" class="nav-link"><span class="nav-icon">⊞</span> Dashboard</a>
-        <a href="student.html" class="nav-link"><span class="nav-icon">👤</span> Students</a>
-        <a href="course.html" class="nav-link active"><span class="nav-icon">📚</span> Courses</a>
+        <a href="index.html" class="nav-link">Dashboard</a>
+        <a href="student.html" class="nav-link">Students</a>
+        <a href="courses.html" class="nav-link active">Courses</a>
     </aside>
 
     <main class="main">
@@ -81,29 +65,25 @@
         <div class="page-subtitle">Create and manage courses available for enrollment.</div>
 
         <div class="layout">
-            <!-- Form -->
             <div class="form-card">
-                <div class="form-card-title" id="formTitle">📚 Add New Course</div>
+                <div id="formTitle" style="color:var(--accent); font-weight:bold; margin-bottom:20px;">📚 Add New Course</div>
                 <input type="hidden" id="courseId">
                 <div class="form-group">
-                    <label for="title">Course Title</label>
+                    <label style="font-size:0.7rem; color:var(--muted)">TITLE</label>
                     <input type="text" class="form-control-dark" id="title" placeholder="e.g. Introduction to CS">
                 </div>
                 <div class="form-group">
-                    <label for="description">Description</label>
-                    <input type="text" class="form-control-dark" id="description" placeholder="Brief course description">
+                    <label style="font-size:0.7rem; color:var(--muted)">DESCRIPTION</label>
+                    <input type="text" class="form-control-dark" id="description" placeholder="Brief description">
                 </div>
                 <div class="form-group">
-                    <label for="credits">Credits</label>
-                    <input type="number" class="form-control-dark" id="credits" placeholder="e.g. 3" min="1" max="6">
+                    <label style="font-size:0.7rem; color:var(--muted)">CREDITS</label>
+                    <input type="number" class="form-control-dark" id="credits" placeholder="e.g. 3">
                 </div>
                 <button class="btn-accent" id="submitBtn" onclick="saveCourse()">Save Course</button>
-                <button class="cancel-btn" id="cancelBtn" onclick="resetForm()" style="display:none;">✕ Cancel editing</button>
             </div>
 
-            <!-- Table -->
             <div class="table-card">
-                <div class="table-header">📋 All Courses</div>
                 <table>
                     <thead>
                         <tr>
@@ -115,7 +95,7 @@
                         </tr>
                     </thead>
                     <tbody id="courseList">
-                        <tr><td colspan="5" class="empty-state">Loading courses...</td></tr>
+                        <tr><td colspan="5" style="text-align:center; padding:40px; color:var(--muted)">Loading courses...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -123,84 +103,62 @@
     </main>
 
     <script>
-        const API = 'http://localhost:3000/courses';
+        // FIXED: URL works on both Railway and Localhost
+        const API = `${window.location.origin}/courses`;
 
         async function fetchCourses() {
-            const res = await fetch(API);
-            const courses = await res.json();
-            const tbody = document.getElementById('courseList');
+            try {
+                const res = await fetch(API);
+                const courses = await res.json();
+                const tbody = document.getElementById('courseList');
 
-            if (!courses.length) {
-                tbody.innerHTML = `<tr><td colspan="5" class="empty-state">No courses yet. Add one!</td></tr>`;
-                return;
+                if (!courses || courses.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:40px; color:var(--muted)">No courses found.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = courses.map(c => `
+                    <tr>
+                        <td style="color:var(--muted)">#${c.id}</td>
+                        <td><strong>${c.title}</strong></td>
+                        <td style="color:var(--muted)">${c.description}</td>
+                        <td><span class="badge-credits">${c.credits} cr</span></td>
+                        <td>
+                            <button class="btn-delete" onclick="deleteCourse(${c.id})">Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                document.getElementById('courseList').innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--danger)">Failed to load data.</td></tr>`;
             }
-
-            tbody.innerHTML = courses.map(c => `
-                <tr>
-                    <td style="color:var(--muted);font-size:0.8rem;">#${c.id}</td>
-                    <td><strong>${c.title}</strong></td>
-                    <td style="color:var(--muted)">${c.description}</td>
-                    <td><span class="badge-credits">${c.credits} cr</span></td>
-                    <td>
-                        <button class="btn-edit" onclick="editCourse(${c.id}, '${c.title.replace(/'/g, "\\'")}', '${c.description.replace(/'/g, "\\'")}', ${c.credits})">Edit</button>
-                        <button class="btn-delete" onclick="deleteCourse(${c.id})">Delete</button>
-                    </td>
-                </tr>
-            `).join('');
         }
 
         async function saveCourse() {
-            const id = document.getElementById('courseId').value;
-            const title = document.getElementById('title').value.trim();
-            const description = document.getElementById('description').value.trim();
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
             const credits = parseInt(document.getElementById('credits').value);
 
-            if (!title || !description || !credits) return alert('Please fill in all fields.');
+            if (!title || !description || !credits) return alert('Fill all fields');
 
-            const body = JSON.stringify({ title, description, credits });
-            const headers = { 'Content-Type': 'application/json' };
+            await fetch(API, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, description, credits })
+            });
 
-            if (id) {
-                await fetch(`${API}/${id}`, { method: 'PATCH', headers, body });
-            } else {
-                await fetch(API, { method: 'POST', headers, body });
-            }
-
-            resetForm();
+            document.getElementById('title').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('credits').value = '';
             fetchCourses();
         }
 
         async function deleteCourse(id) {
-            if (!confirm('Delete this course?')) return;
+            if (!confirm('Delete?')) return;
             await fetch(`${API}/${id}`, { method: 'DELETE' });
             fetchCourses();
-        }
-
-        function editCourse(id, title, description, credits) {
-            document.getElementById('courseId').value = id;
-            document.getElementById('title').value = title;
-            document.getElementById('description').value = description;
-            document.getElementById('credits').value = credits;
-            document.getElementById('formTitle').textContent = '✏️ Edit Course';
-            document.getElementById('submitBtn').textContent = 'Update Course';
-            document.getElementById('submitBtn').classList.add('editing');
-            document.getElementById('cancelBtn').style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function resetForm() {
-            document.getElementById('courseId').value = '';
-            document.getElementById('title').value = '';
-            document.getElementById('description').value = '';
-            document.getElementById('credits').value = '';
-            document.getElementById('formTitle').textContent = '📚 Add New Course';
-            document.getElementById('submitBtn').textContent = 'Save Course';
-            document.getElementById('submitBtn').classList.remove('editing');
-            document.getElementById('cancelBtn').style.display = 'none';
         }
 
         fetchCourses();
     </script>
 </body>
 </html>
-
