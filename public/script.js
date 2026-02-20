@@ -1,18 +1,18 @@
 // --- Configuration ---
-// REPLACE THIS URL with your actual Railway domain!
-const API_URL = 'https://your-nest-api-production.up.railway.app'; 
+// This automatically detects your Railway URL or Localhost
+const API_URL = window.location.origin; 
 
 const COURSE_API = `${API_URL}/courses`;
 const STUDENT_API = `${API_URL}/students`;
 
 // --- Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("EduPortal Script Active");
+    console.log("EduPortal Script Active at:", API_URL);
     initApp();
 });
 
 function initApp() {
-    // Page Routing Logic
+    // Only run functions if the elements exist on the current page
     if (document.getElementById('courseCount')) updateDashboard();
     if (document.getElementById('courseList'))  fetchCourses();
     if (document.getElementById('studentList')) fetchStudents();
@@ -32,6 +32,7 @@ async function updateDashboard() {
         const cCount = document.getElementById('courseCount');
         const sCount = document.getElementById('studentCount');
 
+        // Safely update the UI if the elements exist
         if (cCount) cCount.innerText = Array.isArray(courses) ? courses.length : 0;
         if (sCount) sCount.innerText = Array.isArray(students) ? students.length : 0;
     } catch (err) {
@@ -72,7 +73,7 @@ async function deleteCourse(id) {
         const response = await fetch(`${COURSE_API}/${id}`, { method: 'DELETE' });
         if (response.ok) fetchCourses();
     } catch (err) {
-        alert("Action failed. Is the Railway server sleeping?");
+        console.error("Delete course error:", err);
     }
 }
 
@@ -97,6 +98,17 @@ async function fetchStudents() {
             </tr>
         `).join('');
     } catch (err) {
-        console.warn("Student API endpoint not found on Railway yet.");
+        console.warn("Student fetch error:", err);
+    }
+}
+
+async function deleteStudent(id) {
+    if (!confirm('Delete this student?')) return;
+    
+    try {
+        const response = await fetch(`${STUDENT_API}/${id}`, { method: 'DELETE' });
+        if (response.ok) fetchStudents();
+    } catch (err) {
+        console.error("Delete student error:", err);
     }
 }
