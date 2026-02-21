@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Portal - Courses</title>
+    <title>CpsuPortal - Courses</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
@@ -16,7 +16,6 @@
             --text: #e2e8f0;
             --muted: #64748b;
             --danger: #f87171;
-            --warning: #fbbf24;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: var(--sidebar); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; display: flex; }
@@ -32,24 +31,30 @@
         .page-title { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--text); letter-spacing: -1px; }
         .page-subtitle { color: var(--muted); font-size: 0.9rem; margin-top: 4px; margin-bottom: 32px; }
 
-        .layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; align-items: start; }
-
-        .form-card { background: var(--card); border-radius: 16px; padding: 28px; border: 1px solid rgba(255,255,255,0.06); }
-        .form-group { margin-bottom: 16px; }
-        .form-control-dark { background: var(--surface); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--text); padding: 10px 14px; width: 100%; outline: none; }
-        .btn-accent { background: var(--accent); color: #0f1117; border: none; border-radius: 8px; padding: 11px 20px; font-weight: 700; width: 100%; cursor: pointer; }
-
-        .table-card { background: var(--card); border-radius: 16px; border: 1px solid rgba(255,255,255,0.06); overflow-x: auto; width: 100%; }
-        table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        thead th { padding: 12px 20px; font-size: 0.7rem; text-transform: uppercase; color: var(--muted); background: rgba(255,255,255,0.02); text-align: left; }
-        td { padding: 14px 20px; font-size: 0.88rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
-
-        .badge-credits { background: rgba(110,231,183,0.12); color: var(--accent); padding: 3px 10px; border-radius: 20px; font-size: 0.78rem; }
-        .btn-delete { background: rgba(248,113,113,0.1); color: var(--danger); border: none; border-radius: 6px; padding: 5px 12px; cursor: pointer; }
+        .dept-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+        .dept-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 28px 20px;
+            border: 1px solid rgba(255,255,255,0.06);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+        }
+        .dept-card:hover {
+            border-color: var(--accent);
+            background: rgba(110,231,183,0.06);
+            transform: translateY(-3px);
+        }
+        .dept-icon { font-size: 2.2rem; margin-bottom: 12px; }
+        .dept-name { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: var(--text); margin-bottom: 4px; }
+        .dept-fullname { font-size: 0.75rem; color: var(--muted); margin-bottom: 14px; }
+        .dept-count { display: inline-block; background: rgba(110,231,183,0.12); color: var(--accent); padding: 3px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
     </style>
 </head>
 <body>
-
     <aside class="sidebar">
         <div class="sidebar-logo">🎓 CpsuPortal</div>
         <div class="sidebar-sub">School Management</div>
@@ -73,116 +78,53 @@
 
     <main class="main">
         <div class="page-title">Courses</div>
-        <div class="page-subtitle">Create and manage courses available for enrollment.</div>
-
-        <div class="layout">
-            <!-- Add Course Form (admin only) -->
-            <div class="form-card" id="addCourseForm">
-                <div style="color:var(--accent); font-weight:bold; margin-bottom:20px;">📚 Add New Course</div>
-                <input type="hidden" id="courseId">
-                <div class="form-group">
-                    <label style="font-size:0.7rem; color:var(--muted)">TITLE</label>
-                    <input type="text" class="form-control-dark" id="title" placeholder="e.g. Introduction to CS">
-                </div>
-                <div class="form-group">
-                    <label style="font-size:0.7rem; color:var(--muted)">DESCRIPTION</label>
-                    <input type="text" class="form-control-dark" id="description" placeholder="Brief description">
-                </div>
-                <div class="form-group">
-                    <label style="font-size:0.7rem; color:var(--muted)">CREDITS</label>
-                    <input type="number" class="form-control-dark" id="credits" placeholder="e.g. 3">
-                </div>
-                <button class="btn-accent" onclick="saveCourse()">Save Course</button>
-            </div>
-
-            <div class="table-card">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Credits</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="courseList">
-                        <tr><td colspan="5" style="text-align:center; padding:40px; color:var(--muted)">Loading courses...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <div class="page-subtitle">Select a department to manage its courses.</div>
+        <div class="dept-grid" id="deptGrid">Loading...</div>
     </main>
 
     <script>
-        // Auth check
         const _user = sessionStorage.getItem('user');
         if (!_user) window.location.href = 'login.html';
         const _userData = JSON.parse(_user || '{}');
-        const isAdmin = _userData.role === 'admin';
-
+        if (_userData.role !== 'admin') window.location.href = 'login.html';
         document.getElementById('loggedInUser').textContent = '👤 ' + _userData.name;
 
-        // Hide add form if not admin
-        if (!isAdmin) {
-            document.getElementById('addCourseForm').style.display = 'none';
-        }
+        const DEPARTMENTS = [
+            { code: 'BSIT',         name: 'Info. Technology',     icon: '💻' },
+            { code: 'BSME',         name: 'Mechanical Eng.',       icon: '⚙️' },
+            { code: 'BSEE',         name: 'Electrical Eng.',       icon: '⚡' },
+            { code: 'BSABE',        name: 'Agri-Biosystems Eng.',  icon: '🌾' },
+            { code: 'BSCRIM',       name: 'Criminology',           icon: '⚖️' },
+            { code: 'SOCSI',        name: 'Social Sciences',       icon: '🧠' },
+            { code: 'AGRIBUSINESS', name: 'Agribusiness',          icon: '🌱' },
+            { code: 'FORESTRY',     name: 'Forestry',              icon: '🌳' },
+            { code: 'ANSCI',        name: 'Animal Science',        icon: '🐄' },
+        ];
 
-        const API = '/courses';
-
-        async function fetchCourses() {
+        async function loadDeptCounts() {
             try {
-                const res = await fetch(API);
+                const res = await fetch('/courses');
                 const courses = await res.json();
-                const tbody = document.getElementById('courseList');
 
-                if (!courses || courses.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:40px; color:var(--muted)">No courses found.</td></tr>`;
-                    return;
-                }
+                const counts = {};
+                courses.forEach(c => {
+                    if (c.department) counts[c.department] = (counts[c.department] || 0) + 1;
+                });
 
-                tbody.innerHTML = courses.map(c => `
-                    <tr>
-                        <td style="color:var(--muted)">#${c.id}</td>
-                        <td><strong>${c.title}</strong></td>
-                        <td style="color:var(--muted)">${c.description}</td>
-                        <td><span class="badge-credits">${c.credits} cr</span></td>
-                        <td>
-                            ${isAdmin ? `<button class="btn-delete" onclick="deleteCourse(${c.id})">Delete</button>` : '-'}
-                        </td>
-                    </tr>
+                document.getElementById('deptGrid').innerHTML = DEPARTMENTS.map(d => `
+                    <a class="dept-card" href="department-courses.html?dept=${encodeURIComponent(d.code)}">
+                        <div class="dept-icon">${d.icon}</div>
+                        <div class="dept-name">${d.code}</div>
+                        <div class="dept-fullname">${d.name}</div>
+                        <div class="dept-count">${counts[d.code] || 0} courses</div>
+                    </a>
                 `).join('');
-            } catch (err) {
-                document.getElementById('courseList').innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--danger)">Failed to load data.</td></tr>`;
+            } catch (e) {
+                document.getElementById('deptGrid').innerHTML = `<p style="color:var(--danger)">Failed to load.</p>`;
             }
         }
 
-        async function saveCourse() {
-            const title = document.getElementById('title').value;
-            const description = document.getElementById('description').value;
-            const credits = parseInt(document.getElementById('credits').value);
-
-            if (!title || !description || !credits) return alert('Fill all fields');
-
-            await fetch(API, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, description, credits })
-            });
-
-            document.getElementById('title').value = '';
-            document.getElementById('description').value = '';
-            document.getElementById('credits').value = '';
-            fetchCourses();
-        }
-
-        async function deleteCourse(id) {
-            if (!confirm('Delete this course?')) return;
-            await fetch(`${API}/${id}`, { method: 'DELETE' });
-            fetchCourses();
-        }
-
-        fetchCourses();
+        loadDeptCounts();
     </script>
 </body>
 </html>
