@@ -19,6 +19,15 @@ export class User {
   @Column({ type: 'enum', enum: UserRole, default: UserRole.STUDENT })
   role: UserRole;
 
+  @Column({ nullable: true })
+  department: string;
+
+  @Column({ nullable: true })
+  year: string;
+
+  @Column({ nullable: true })
+  section: string;
+
   @CreateDateColumn()
   createdAt: Date;
 }
