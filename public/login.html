@@ -83,15 +83,20 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         .form-title {
-            font-family: 'Syne', sans-serif;
-            font-weight: 700;
-            font-size: 1.2rem;
-            margin-bottom: 6px;
-        }
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+    color: var(--accent);
+    text-align: center;
+    white-space: nowrap;
+    letter-spacing: 0;
+}
         .form-sub {
             color: var(--muted);
             font-size: 0.83rem;
             margin-bottom: 24px;
+            text-align: center;
         }
         .form-group {
             margin-bottom: 16px;
@@ -116,6 +121,7 @@
             transition: border-color 0.2s;
             font-family: 'DM Sans', sans-serif;
         }
+        .form-control-dark::placeholder { color: rgba(255,255,255,0.25); }
         .form-control-dark:focus { border-color: var(--accent); }
         .btn-accent {
             background: var(--accent);
@@ -186,7 +192,7 @@
 
             <!-- LOGIN PANEL -->
             <div class="panel active" id="loginPanel">
-                <div class="form-title">Welcome back</div>
+                <div class="form-title">Welcome Back</div>
                 <div class="form-sub">Login to access your portal</div>
 
                 <div class="form-group">
