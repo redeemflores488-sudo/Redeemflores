@@ -83,15 +83,14 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         .form-title {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 1.1rem;
-    margin-bottom: 6px;
-    color: var(--accent);
-    text-align: center;
-    white-space: nowrap;
-    letter-spacing: 0;
-}
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.6rem;
+            margin-bottom: 6px;
+            color: var(--accent);
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
         .form-sub {
             color: var(--muted);
             font-size: 0.83rem;
@@ -291,7 +290,7 @@
                 if (!res.ok) return showError('loginError', data.message || 'Login failed.');
 
                 sessionStorage.setItem('user', JSON.stringify({ name: data.name, role: data.role }));
-                window.location.href = data.role === 'admin' ? 'index.html' : 'my-courses.html';
+                window.location.href = data.role === 'admin' ? 'index.html' : 'department.html';
             } catch (e) {
                 showError('loginError', 'Server error. Please try again.');
             }
