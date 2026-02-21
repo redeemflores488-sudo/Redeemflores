@@ -221,6 +221,13 @@
         </div>
     </main>
 
-    <script src="script.js"></script>
+<script>
+    const _user = sessionStorage.getItem('user');
+    if (!_user) window.location.href = 'login.html';
+    const _userData = JSON.parse(_user || '{}');
+    document.getElementById('loggedInUser').textContent = '👤 ' + _userData.name;
+</script>
+
+   <script src="script.js"></script>
 </body>
 </html>
