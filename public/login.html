@@ -245,8 +245,10 @@
         const API = '';
 
         // Redirect if already logged in
-        if (sessionStorage.getItem('user')) {
-            window.location.href = 'index.html';
+        const _existingUser = sessionStorage.getItem('user');
+        if (_existingUser) {
+            const _d = JSON.parse(_existingUser);
+            window.location.href = _d.role === 'admin' ? 'index.html' : 'my-courses.html';
         }
 
         function switchTab(tab) {
@@ -283,7 +285,7 @@
                 if (!res.ok) return showError('loginError', data.message || 'Login failed.');
 
                 sessionStorage.setItem('user', JSON.stringify({ name: data.name, role: data.role }));
-                window.location.href = 'index.html';
+                window.location.href = data.role === 'admin' ? 'index.html' : 'my-courses.html';
             } catch (e) {
                 showError('loginError', 'Server error. Please try again.');
             }
