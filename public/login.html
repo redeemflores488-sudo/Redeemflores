@@ -254,7 +254,7 @@
         const _existingUser = sessionStorage.getItem('user');
         if (_existingUser) {
             const _d = JSON.parse(_existingUser);
-            window.location.href = _d.role === 'admin' ? 'index.html' : 'my-courses.html';
+            window.location.href = _d.role === 'admin' ? 'index.html' : 'department.html';
         }
 
         function switchTab(tab) {
