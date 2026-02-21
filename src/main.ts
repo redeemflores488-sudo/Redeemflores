@@ -7,11 +7,13 @@ import { join } from 'path';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // Serve static files from public folder
-  app.useStaticAssets(join(__dirname, '..', 'public'));
+    // Serve static files from public folder
+      app.useStaticAssets(join(__dirname, '..', 'public'), {
+          index: 'login.html', // ← only change
+            });
 
-  // RAILWAY PORT CONFIGURATION
-  const port = process.env.PORT || 3000;
-  await app.listen(port, '0.0.0.0');
-}
-bootstrap();
+              // RAILWAY PORT CONFIGURATION
+                const port = process.env.PORT || 3000;
+                  await app.listen(port, '0.0.0.0');
+                  }
+                  bootstrap();
