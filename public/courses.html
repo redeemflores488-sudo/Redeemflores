@@ -32,7 +32,6 @@
         .page-title { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--text); letter-spacing: -1px; }
         .page-subtitle { color: var(--muted); font-size: 0.9rem; margin-top: 4px; margin-bottom: 32px; }
 
-        /* FIXED LAYOUT: Changed to allow wrapping */
         .layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; align-items: start; }
 
         .form-card { background: var(--card); border-radius: 16px; padding: 28px; border: 1px solid rgba(255,255,255,0.06); }
@@ -40,12 +39,11 @@
         .form-control-dark { background: var(--surface); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--text); padding: 10px 14px; width: 100%; outline: none; }
         .btn-accent { background: var(--accent); color: #0f1117; border: none; border-radius: 8px; padding: 11px 20px; font-weight: 700; width: 100%; cursor: pointer; }
 
-        /* FIXED TABLE: Added horizontal scroll */
         .table-card { background: var(--card); border-radius: 16px; border: 1px solid rgba(255,255,255,0.06); overflow-x: auto; width: 100%; }
         table { width: 100%; border-collapse: collapse; min-width: 600px; }
         thead th { padding: 12px 20px; font-size: 0.7rem; text-transform: uppercase; color: var(--muted); background: rgba(255,255,255,0.02); text-align: left; }
         td { padding: 14px 20px; font-size: 0.88rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
-        
+
         .badge-credits { background: rgba(110,231,183,0.12); color: var(--accent); padding: 3px 10px; border-radius: 20px; font-size: 0.78rem; }
         .btn-delete { background: rgba(248,113,113,0.1); color: var(--danger); border: none; border-radius: 6px; padding: 5px 12px; cursor: pointer; }
     </style>
@@ -53,13 +51,13 @@
 <body>
 
     <aside class="sidebar">
-        <div class="sidebar-logo">🎓 EduPortal</div>
+        <div class="sidebar-logo">🎓 CpsuPortal</div>
         <div class="sidebar-sub">School Management</div>
         <a href="index.html" class="nav-link">Dashboard</a>
         <a href="student.html" class="nav-link">Students</a>
         <a href="courses.html" class="nav-link active">Courses</a>
 
-<div style="margin-top: auto;">
+        <div style="margin-top: auto;">
             <div style="border-top: 1px solid rgba(255,255,255,0.06); padding-top: 16px;">
                 <span style="font-size: 0.75rem; color: var(--muted); padding-left: 12px;" id="loggedInUser"></span>
                 <button onclick="sessionStorage.clear(); window.location.href='login.html'"
@@ -78,8 +76,9 @@
         <div class="page-subtitle">Create and manage courses available for enrollment.</div>
 
         <div class="layout">
-            <div class="form-card">
-                <div id="formTitle" style="color:var(--accent); font-weight:bold; margin-bottom:20px;">📚 Add New Course</div>
+            <!-- Add Course Form (admin only) -->
+            <div class="form-card" id="addCourseForm">
+                <div style="color:var(--accent); font-weight:bold; margin-bottom:20px;">📚 Add New Course</div>
                 <input type="hidden" id="courseId">
                 <div class="form-group">
                     <label style="font-size:0.7rem; color:var(--muted)">TITLE</label>
@@ -93,7 +92,7 @@
                     <label style="font-size:0.7rem; color:var(--muted)">CREDITS</label>
                     <input type="number" class="form-control-dark" id="credits" placeholder="e.g. 3">
                 </div>
-                <button class="btn-accent" id="submitBtn" onclick="saveCourse()">Save Course</button>
+                <button class="btn-accent" onclick="saveCourse()">Save Course</button>
             </div>
 
             <div class="table-card">
@@ -116,8 +115,20 @@
     </main>
 
     <script>
-        // FIXED: URL works on both Railway and Localhost
-        const API = `${window.location.origin}/courses`;
+        // Auth check
+        const _user = sessionStorage.getItem('user');
+        if (!_user) window.location.href = 'login.html';
+        const _userData = JSON.parse(_user || '{}');
+        const isAdmin = _userData.role === 'admin';
+
+        document.getElementById('loggedInUser').textContent = '👤 ' + _userData.name;
+
+        // Hide add form if not admin
+        if (!isAdmin) {
+            document.getElementById('addCourseForm').style.display = 'none';
+        }
+
+        const API = '/courses';
 
         async function fetchCourses() {
             try {
@@ -137,7 +148,7 @@
                         <td style="color:var(--muted)">${c.description}</td>
                         <td><span class="badge-credits">${c.credits} cr</span></td>
                         <td>
-                            <button class="btn-delete" onclick="deleteCourse(${c.id})">Delete</button>
+                            ${isAdmin ? `<button class="btn-delete" onclick="deleteCourse(${c.id})">Delete</button>` : '-'}
                         </td>
                     </tr>
                 `).join('');
@@ -166,7 +177,7 @@
         }
 
         async function deleteCourse(id) {
-            if (!confirm('Delete?')) return;
+            if (!confirm('Delete this course?')) return;
             await fetch(`${API}/${id}`, { method: 'DELETE' });
             fetchCourses();
         }
@@ -175,5 +186,3 @@
     </script>
 </body>
 </html>
-
-
