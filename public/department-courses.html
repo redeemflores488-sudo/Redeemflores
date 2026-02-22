@@ -64,6 +64,9 @@
         .btn-delete { background: rgba(248,113,113,0.1); color: var(--danger); border: none; border-radius: 6px; padding: 5px 12px; cursor: pointer; font-size: 0.8rem; }
         .btn-delete:hover { background: rgba(248,113,113,0.22); }
         .empty-state { text-align: center; padding: 40px; color: var(--muted); font-size: 0.88rem; }
+        .search-card { background: var(--card); border-radius: 14px; padding: 14px 20px; border: 1px solid rgba(255,255,255,0.06); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .search-input { background: transparent; border: none; color: var(--text); font-size: 0.9rem; width: 100%; outline: none; font-family: 'DM Sans', sans-serif; }
+        .search-input::placeholder { color: var(--muted); }
     </style>
 </head>
 <body>
@@ -132,6 +135,12 @@
                 <button class="btn-accent" onclick="saveCourse()">Save Course</button>
             </div>
 
+            <!-- Search -->
+            <div class="search-card">
+                <span style="color:var(--muted)">🔍</span>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search course by title..." oninput="applySearch()">
+            </div>
+
             <!-- Courses Table -->
             <div class="table-card">
                 <table>
@@ -181,6 +190,16 @@
                 document.getElementById('courseList').innerHTML =
                     `<tr><td colspan="5" class="empty-state" style="color:var(--danger)">Failed to load courses.</td></tr>`;
             }
+        }
+
+        function applySearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('#courseList tr').forEach(row => {
+                const title = row.querySelector('td:first-child');
+                if (title) {
+                    row.style.display = title.textContent.toLowerCase().includes(query) ? '' : 'none';
+                }
+            });
         }
 
         function renderTable() {
