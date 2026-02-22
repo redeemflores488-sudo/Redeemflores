@@ -1,15 +1,18 @@
 // src/courses/courses.controller.ts
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 
 @Controller('courses')
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
-  // GET /courses — fetch all courses
+  // GET /courses?department=BSIT&year=3 — fetch all or filtered courses
   @Get()
-  findAll() {
-    return this.coursesService.findAll();
+  findAll(
+    @Query('department') department?: string,
+    @Query('year') year?: string,
+  ) {
+    return this.coursesService.findAll(department, year);
   }
 
   // GET /courses/:id — fetch one course
@@ -20,7 +23,7 @@ export class CoursesController {
 
   // POST /courses — create a new course
   @Post()
-  create(@Body() body: { title: string; description: string; credits: number }) {
+  create(@Body() body: { title: string; description: string; credits: number; department: string; year: string }) {
     return this.coursesService.create(body);
   }
 
@@ -28,7 +31,7 @@ export class CoursesController {
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() body: { title?: string; description?: string; credits?: number },
+    @Body() body: { title?: string; description?: string; credits?: number; department?: string; year?: string },
   ) {
     return this.coursesService.update(+id, body);
   }
