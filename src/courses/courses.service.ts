@@ -1,3 +1,4 @@
+
 // src/courses/courses.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -19,9 +20,12 @@ export class CoursesService {
     return this.courseRepository.save(course);
   }
 
-  // READ ALL
-  findAll(): Promise<Course[]> {
-    return this.courseRepository.find();
+  // READ ALL - with optional department and year filter
+  findAll(department?: string, year?: string): Promise<Course[]> {
+    const where: any = {};
+    if (department) where.department = department;
+    if (year) where.year = year;
+    return this.courseRepository.find({ where });
   }
 
   // READ ONE
