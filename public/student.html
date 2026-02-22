@@ -31,29 +31,49 @@
 
         .main { margin-left: 240px; flex: 1; padding: 40px; }
         .page-title { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--text); letter-spacing: -1px; }
-        .page-subtitle { color: var(--muted); font-size: 0.9rem; margin-top: 4px; margin-bottom: 32px; }
+        .page-subtitle { color: var(--muted); font-size: 0.9rem; margin-top: 4px; margin-bottom: 28px; }
 
+        /* SEARCH */
+        .search-card { background: var(--card); border-radius: 14px; padding: 16px 20px; border: 1px solid rgba(255,255,255,0.06); margin-bottom: 28px; display: flex; align-items: center; gap: 12px; position: relative; }
+        .search-input { background: transparent; border: none; color: var(--text); font-size: 0.95rem; width: 100%; outline: none; font-family: 'DM Sans', sans-serif; }
+        .search-input::placeholder { color: var(--muted); }
+
+        /* SEARCH RESULTS DROPDOWN */
+        .search-results { position: absolute; top: calc(100% + 8px); left: 0; right: 0; background: var(--card); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; z-index: 200; max-height: 320px; overflow-y: auto; display: none; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+        .search-results.open { display: block; }
+        .search-result-item { padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.04); cursor: pointer; transition: background 0.15s; display: flex; align-items: center; justify-content: space-between; }
+        .search-result-item:last-child { border-bottom: none; }
+        .search-result-item:hover { background: rgba(255,255,255,0.04); }
+        .result-name { font-weight: 600; font-size: 0.9rem; }
+        .result-meta { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+        .result-dept { background: rgba(129,140,248,0.15); color: var(--accent2); padding: 2px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
+        .no-results { padding: 24px; text-align: center; color: var(--muted); font-size: 0.88rem; }
+
+        /* DEPT GRID */
+        .section-label { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 16px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; }
         .dept-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
-        .dept-card {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 28px 20px;
-            border: 1px solid rgba(255,255,255,0.06);
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-            text-decoration: none;
-            display: block;
-        }
-        .dept-card:hover {
-            border-color: var(--accent2);
-            background: rgba(129,140,248,0.06);
-            transform: translateY(-3px);
-        }
+        .dept-card { background: var(--card); border-radius: 16px; padding: 28px 20px; border: 1px solid rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s; text-align: center; text-decoration: none; display: block; }
+        .dept-card:hover { border-color: var(--accent2); background: rgba(129,140,248,0.06); transform: translateY(-3px); }
         .dept-icon { font-size: 2.2rem; margin-bottom: 12px; }
         .dept-name { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: var(--text); margin-bottom: 4px; }
         .dept-fullname { font-size: 0.75rem; color: var(--muted); margin-bottom: 14px; }
         .dept-count { display: inline-block; background: rgba(129,140,248,0.12); color: var(--accent2); padding: 3px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+        /* STUDENT ACTION MODAL */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-overlay.open { display: flex; }
+        .modal-box { background: var(--card); border-radius: 16px; padding: 32px; width: 440px; border: 1px solid rgba(255,255,255,0.1); }
+        .modal-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--accent); margin-bottom: 4px; }
+        .modal-sub { color: var(--muted); font-size: 0.82rem; margin-bottom: 24px; }
+        .modal-section-title { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 10px; }
+        .dept-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 24px; max-height: 260px; overflow-y: auto; }
+        .dept-option { background: var(--surface); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px 14px; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: 'Syne', sans-serif; color: var(--text); display: flex; align-items: center; gap: 8px; }
+        .dept-option:hover { border-color: var(--accent); color: var(--accent); background: rgba(110,231,183,0.06); }
+        .dept-option.current { border-color: var(--accent2); color: var(--accent2); background: rgba(129,140,248,0.08); cursor: default; }
+        .divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 20px 0; }
+        .btn-delete-student { background: rgba(248,113,113,0.1); color: var(--danger); border: 1px solid rgba(248,113,113,0.2); border-radius: 8px; padding: 11px; font-weight: 700; font-size: 0.88rem; cursor: pointer; font-family: 'Syne', sans-serif; width: 100%; transition: all 0.2s; }
+        .btn-delete-student:hover { background: rgba(248,113,113,0.22); }
+        .btn-cancel { background: rgba(255,255,255,0.06); color: var(--text); border: none; border-radius: 8px; padding: 11px; font-size: 0.88rem; cursor: pointer; font-family: 'DM Sans', sans-serif; width: 100%; margin-top: 8px; }
     </style>
 </head>
 <body>
@@ -81,9 +101,35 @@
 
     <main class="main">
         <div class="page-title">Students</div>
-        <div class="page-subtitle">Select a department to view its enrolled students.</div>
+        <div class="page-subtitle">Search students or browse by department.</div>
+
+        <!-- Search -->
+        <div class="search-card">
+            <span style="color:var(--muted); font-size:1.1rem;">🔍</span>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search student by name..." oninput="searchStudents()" autocomplete="off">
+            <div class="search-results" id="searchResults"></div>
+        </div>
+
+        <!-- Department Cards -->
+        <div class="section-label">Browse by Department</div>
         <div class="dept-grid" id="deptGrid">Loading...</div>
     </main>
+
+    <!-- Student Action Modal -->
+    <div class="modal-overlay" id="studentModal">
+        <div class="modal-box">
+            <div class="modal-title" id="modalStudentName"></div>
+            <div class="modal-sub" id="modalStudentMeta"></div>
+
+            <div class="modal-section-title">Move to Another Department</div>
+            <div class="dept-options" id="deptOptions"></div>
+
+            <div class="divider"></div>
+
+            <button class="btn-delete-student" onclick="deleteStudent()">🗑️ Remove Student from System</button>
+            <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
 
     <script>
         const _user = sessionStorage.getItem('user');
@@ -104,27 +150,45 @@
             { code: 'ANSCI',        name: 'Animal Science',        icon: '🐄' },
         ];
 
-        async function loadDeptCounts() {
+        let allRequests = [];
+        let studentMap = {};
+        let currentStudent = null;
+
+        async function loadData() {
             try {
                 const res = await fetch('/enrollment-requests');
-                const requests = await res.json();
-                const approved = requests.filter(r => r.status === 'approved');
+                allRequests = await res.json();
+                const approved = allRequests.filter(r => r.status === 'approved');
 
-                // Count unique students per department using course.department
-                const deptStudents = {};
+                // Build student map: name -> { department, courses, year }
+                studentMap = {};
                 approved.forEach(r => {
-                    const dept = r.course?.department;
-                    if (!dept) return;
-                    if (!deptStudents[dept]) deptStudents[dept] = new Set();
-                    deptStudents[dept].add(r.studentName);
+                    if (!studentMap[r.studentName]) {
+                        studentMap[r.studentName] = {
+                            name: r.studentName,
+                            department: r.course?.department || '—',
+                            year: r.course?.year || '—',
+                            courses: [],
+                            requests: [],
+                        };
+                    }
+                    studentMap[r.studentName].courses.push(r.course);
+                    studentMap[r.studentName].requests.push(r);
                 });
 
+                // Count per dept
+                const counts = {};
+                Object.values(studentMap).forEach(s => {
+                    counts[s.department] = (counts[s.department] || 0) + 1;
+                });
+
+                // Render dept cards
                 document.getElementById('deptGrid').innerHTML = DEPARTMENTS.map(d => `
-                    <a class="dept-card" href="department-students.html?dept=${encodeURIComponent(d.code)}">
+                    <a class="dept-card" href="department-student.html?dept=${encodeURIComponent(d.code)}">
                         <div class="dept-icon">${d.icon}</div>
                         <div class="dept-name">${d.code}</div>
                         <div class="dept-fullname">${d.name}</div>
-                        <div class="dept-count">${deptStudents[d.code]?.size || 0} students</div>
+                        <div class="dept-count">${counts[d.code] || 0} students</div>
                     </a>
                 `).join('');
             } catch (e) {
@@ -132,7 +196,113 @@
             }
         }
 
-        loadDeptCounts();
+        function searchStudents() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const resultsEl = document.getElementById('searchResults');
+
+            if (!query) {
+                resultsEl.classList.remove('open');
+                return;
+            }
+
+            const matches = Object.values(studentMap).filter(s =>
+                s.name.toLowerCase().includes(query)
+            );
+
+            if (!matches.length) {
+                resultsEl.innerHTML = `<div class="no-results">No students found for "${query}"</div>`;
+                resultsEl.classList.add('open');
+                return;
+            }
+
+            resultsEl.innerHTML = matches.map(s => `
+                <div class="search-result-item" onclick="openStudentModal('${s.name}')">
+                    <div>
+                        <div class="result-name">👤 ${s.name}</div>
+                        <div class="result-meta">${s.courses.length} course${s.courses.length !== 1 ? 's' : ''} enrolled • Year ${s.year}</div>
+                    </div>
+                    <span class="result-dept">${s.department}</span>
+                </div>
+            `).join('');
+
+            resultsEl.classList.add('open');
+        }
+
+        // Close search results when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.search-card')) {
+                document.getElementById('searchResults').classList.remove('open');
+            }
+        });
+
+        function openStudentModal(name) {
+            currentStudent = studentMap[name];
+            document.getElementById('searchResults').classList.remove('open');
+            document.getElementById('searchInput').value = '';
+
+            document.getElementById('modalStudentName').textContent = `👤 ${name}`;
+            document.getElementById('modalStudentMeta').textContent =
+                `${currentStudent.department} • Year ${currentStudent.year} • ${currentStudent.courses.length} course(s) enrolled`;
+
+            // Render department options
+            document.getElementById('deptOptions').innerHTML = DEPARTMENTS.map(d => `
+                <button class="dept-option ${d.code === currentStudent.department ? 'current' : ''}"
+                    onclick="${d.code !== currentStudent.department ? `moveToDept('${d.code}')` : ''}">
+                    ${d.icon} ${d.code}
+                    ${d.code === currentStudent.department ? '<span style="font-size:0.65rem;opacity:0.6">(current)</span>' : ''}
+                </button>
+            `).join('');
+
+            document.getElementById('studentModal').classList.add('open');
+        }
+
+        async function moveToDept(newDept) {
+            if (!confirm(`Move ${currentStudent.name} to ${newDept}?`)) return;
+
+            try {
+                // Update the user's department in the backend
+                await fetch('/auth/section', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: currentStudent.name,
+                        department: newDept,
+                        year: currentStudent.year,
+                        section: currentStudent.section || 'A',
+                    }),
+                });
+
+                closeModal();
+                await loadData();
+                alert(`✅ ${currentStudent.name} moved to ${newDept} successfully!`);
+            } catch (e) {
+                alert('Failed to move student. Please try again.');
+            }
+        }
+
+        async function deleteStudent() {
+            if (!confirm(`Remove ${currentStudent.name} from the system? This will reject all their enrollment requests.`)) return;
+
+            try {
+                // Reject all their enrollment requests
+                for (const req of currentStudent.requests) {
+                    await fetch(`/enrollment-requests/${req.id}/reject`, { method: 'PATCH' });
+                }
+
+                closeModal();
+                await loadData();
+                alert(`✅ ${currentStudent.name} has been removed.`);
+            } catch (e) {
+                alert('Failed to remove student. Please try again.');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('studentModal').classList.remove('open');
+            currentStudent = null;
+        }
+
+        loadData();
     </script>
 </body>
 </html>
